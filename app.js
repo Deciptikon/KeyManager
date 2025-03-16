@@ -1,3 +1,4 @@
+console.log(`start app.js`);
 bridge = window.vkBridge;
 
 document.getElementById("add-key-btn").addEventListener("click", () => {
@@ -149,6 +150,17 @@ function handleAddKey() {
 
 // Инициализация приложения
 async function init() {
+  console.log(`function init()`);
+  bridge
+    .send("VKWebAppGetConfig")
+    .then((data) => {
+      console.log(`Платформа ${data.app}`);
+      //console.log(data.app);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   await displayKeys(currentOffset, limit);
 
   // Обработчики для кнопок пагинации
