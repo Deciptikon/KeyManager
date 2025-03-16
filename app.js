@@ -42,14 +42,12 @@ function getData(key) {
         keys: [key], // Передаём массив с одним ключом
       })
       .then((response) => {
+        console.log(`Прочтенные ключи`);
         console.log(response);
-        if (
-          response.detail &&
-          response.detail.data &&
-          response.detail.data.keys
-        ) {
+        console.log(response.keys[0]);
+        if (response.keys.length > 0) {
           // Извлекаем значение по ключу
-          const value = response.detail.data.keys[0].value;
+          const value = response.keys[0][key].value;
           resolve(value); // Возвращаем значение
         } else {
           resolve("Данные не найдены"); // Если данные отсутствуют
