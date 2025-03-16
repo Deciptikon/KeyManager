@@ -12,6 +12,7 @@ function getKeys(offset, limit) {
       })
       .then((response) => {
         console.log(`response = ${response}`);
+        console.log(response);
         console.log(`response.detail = ${response.detail}`);
         console.log(`response.detail.data = ${response.detail.data}`);
         console.log(`response.detail.data.keys = ${response.detail.data.keys}`);
