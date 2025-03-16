@@ -142,9 +142,30 @@ async function handleKeyClick(key) {
   try {
     const data = await getData(key);
     responseArea.innerHTML = `
-            <h5>Значение по ключу "${key}":</h5>
-            <p>${data}</p>
-        `;
+      <h5>Значение по ключу "${key}":</h5>
+      <textarea id="key-value-edit" class="form-control mb-2" rows="5">${data}</textarea>
+      <button id="save-key-btn" class="btn btn-primary">Сохранить</button>
+    `;
+
+    // Обработчик для кнопки "Сохранить"
+    document.getElementById("save-key-btn").addEventListener("click", () => {
+      const newValue = document.getElementById("key-value-edit").value;
+
+      // Отправляем изменения на сервер
+      bridge
+        .send("VKWebAppStorageSet", {
+          key: key,
+          value: newValue,
+        })
+        .then((response) => {
+          console.log("Значение ключа успешно обновлено:", response);
+          alert("Изменения сохранены!");
+        })
+        .catch((error) => {
+          console.error("Ошибка при сохранении изменений:", error);
+          alert("Ошибка при сохранении изменений");
+        });
+    });
   } catch (error) {
     console.error("Ошибка при загрузке данных:", error);
     responseArea.innerHTML =
