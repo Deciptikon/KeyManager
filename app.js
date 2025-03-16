@@ -1,5 +1,20 @@
 console.log(`start app.js`);
+
 bridge = window.vkBridge;
+
+let currentOffset = 0; // Текущее смещение
+const limit = 5; // Количество ключей на странице
+
+const toastEl = document.getElementById("toast");
+const toast = new bootstrap.Toast(toastEl, {
+  autohide: true,
+  delay: 3000,
+});
+
+function showToast(message) {
+  document.getElementById("toast-message").textContent = message;
+  toast.show();
+}
 
 // Обработчик для формы добавления ключа
 document.getElementById("add-key-form").addEventListener("submit", (event) => {
@@ -21,11 +36,12 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
       .then((data) => {
         if (data.result) {
           // Значение переменной задано
+          showToast("Новый ключ сохранён.");
           displayKeys(currentOffset, limit);
         }
       })
       .catch((error) => {
-        // Ошибка
+        showToast("Ошибка добавления ключа.");
         console.log(error);
       });
 
@@ -38,12 +54,9 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
     // Очищаем форму
     document.getElementById("add-key-form").reset();
   } else {
-    alert("Пожалуйста, заполните все поля.");
+    showToast('Заполниете поле "Key"');
   }
 });
-
-let currentOffset = 0; // Текущее смещение
-const limit = 5; // Количество ключей на странице
 
 function getKeys(offset, limit) {
   console.log(`getKeys()`);
@@ -54,11 +67,7 @@ function getKeys(offset, limit) {
         offset: offset,
       })
       .then((response) => {
-        console.log(`response = ${response}`);
-        console.log(response);
-        console.log(`response.keys = ${response.keys}`);
         if (response.keys.length > 0) {
-          console.log(`response.keys = ${response.keys}`);
           resolve(response.keys); // Возвращаем массив ключей
         } else {
           resolve([]); // Если ключей нет, возвращаем пустой массив
@@ -79,9 +88,6 @@ function getData(key) {
         keys: [key], // Передаём массив с одним ключом
       })
       .then((response) => {
-        console.log(`Прочтенные ключи`);
-        console.log(response);
-        console.log(response.keys[0]);
         if (response.keys.length > 0) {
           const data = response.keys[0]; // нулевой элемент
           if (data.key === key) resolve(data.value); // Возвращаем значение
@@ -110,7 +116,6 @@ async function displayKeys(offset, limit) {
     keyList.innerHTML = ""; // Очищаем список перед добавлением новых ключей
 
     if (keys.length === 0) {
-      addKeyItem.addEventListener("click", () => handleAddKey()); // Обработчик клика
       keyList.innerHTML = '<div class="text-center">Ключи не найдены.</div>';
     } else {
       // Отображаем ключи
@@ -123,9 +128,6 @@ async function displayKeys(offset, limit) {
       });
     }
 
-    // Добавляем элемент "Добавить ключ" (вне зависимости от наличия ключей)
-
-    // Управляем состоянием кнопок
     prevBtn.disabled = offset === 0; // Кнопка "Назад" disabled, если offset = 0
     nextBtn.disabled = keys.length < limit; // Кнопка "Вперёд" disabled, если ключей меньше limit
   } catch (error) {
@@ -150,7 +152,6 @@ async function handleKeyClick(key) {
     // Обработчик для кнопки "Сохранить"
     document.getElementById("save-key-btn").addEventListener("click", () => {
       const newValue = document.getElementById("key-value-edit").value;
-
       // Отправляем изменения на сервер
       bridge
         .send("VKWebAppStorageSet", {
@@ -159,39 +160,23 @@ async function handleKeyClick(key) {
         })
         .then((response) => {
           console.log("Значение ключа успешно обновлено:", response);
-          alert("Изменения сохранены!");
+
+          if (newValue === "") {
+            showToast("Ключ успешно удалён.");
+            displayKeys(currentOffset, limit);
+          } else {
+            showToast("Изменения успешно сохранены.");
+          }
         })
         .catch((error) => {
           console.error("Ошибка при сохранении изменений:", error);
-          alert("Ошибка при сохранении изменений");
+          showToast("Ошибка сохранения изменений");
         });
     });
   } catch (error) {
     console.error("Ошибка при загрузке данных:", error);
     responseArea.innerHTML =
       '<div class="text-danger">Ошибка при загрузке данных.</div>';
-  }
-}
-
-function handleAddKey() {
-  const newKey = prompt("Введите новый ключ:"); // Простой способ ввода
-  if (newKey) {
-    console.log("Добавляем новый ключ:", newKey);
-    bridge
-      .send("VKWebAppStorageSet", {
-        key: newKey,
-        value: "example_value",
-      })
-      .then((data) => {
-        if (data.result) {
-          // Значение переменной задано
-          displayKeys(currentOffset, limit);
-        }
-      })
-      .catch((error) => {
-        // Ошибка
-        console.log(error);
-      });
   }
 }
 
