@@ -25,23 +25,29 @@
           data-bs-toggle="modal"
           data-bs-target="#addKeyModal"
         >
-          Добавить ключ
+          <i class="bi bi-plus-circle"></i>
         </button>
       </div>
       <div id="key-list" class="list-group mb-4"></div>
       <div class="pagination-controls">
-        <button id="prev-btn" class="btn btn-primary" disabled>Назад</button>
+        <button id="prev-btn" class="btn btn-primary" disabled>
+          <i class="bi bi-arrow-left"></i>
+        </button>
         <input
           type="number"
           id="page-number-input"
-          class="form-control"
+          class="form-control ms-3"
           placeholder="Смещение"
           min="0"
           value="0"
-          style="width: 100px"
+          style="width: 80px"
         />
-        <button id="go-to-btn" class="btn btn-primary">-></button>
-        <button id="next-btn" class="btn btn-primary">Вперёд</button>
+        <button id="go-to-btn" class="btn btn-primary me-3">
+          <i class="bi bi-three-dots"></i>
+        </button>
+        <button id="next-btn" class="btn btn-primary">
+          <i class="bi bi-arrow-right"></i>
+        </button>
       </div>
       <div id="response-area" class="response-area"></div>
     </div>
