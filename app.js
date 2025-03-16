@@ -2,35 +2,36 @@ bridge = window.vkBridge;
 let currentOffset = 0; // Текущее смещение
 const limit = 5; // Количество ключей на странице
 
-// Пример функции getKeys
 function getKeys(offset, limit) {
-  function getKeys(offset, limit) {
-    return new Promise((resolve, reject) => {
-      bridge
-        .send("VKWebAppStorageGetKeys", {
-          count: limit,
-          offset: offset,
-        })
-        .then((response) => {
-          if (
-            response.detail &&
-            response.detail.data &&
-            response.detail.data.keys
-          ) {
-            resolve(response.detail.data.keys); // Возвращаем массив ключей
-          } else {
-            resolve([]); // Если ключей нет, возвращаем пустой массив
-          }
-        })
-        .catch((error) => {
-          console.error("Ошибка при получении ключей:", error);
-          reject(error); // Пробрасываем ошибку
-        });
-    });
-  }
+  console.log(`getKeys()`);
+  return new Promise((resolve, reject) => {
+    bridge
+      .send("VKWebAppStorageGetKeys", {
+        count: limit,
+        offset: offset,
+      })
+      .then((response) => {
+        console.log(`response = ${response}`);
+        if (
+          response.detail &&
+          response.detail.data &&
+          response.detail.data.keys
+        ) {
+          console.log(
+            `response.detail.data.keys = ${response.detail.data.keys}`
+          );
+          resolve(response.detail.data.keys); // Возвращаем массив ключей
+        } else {
+          resolve([]); // Если ключей нет, возвращаем пустой массив
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при получении ключей:", error);
+        reject(error); // Пробрасываем ошибку
+      });
+  });
 }
 
-// Пример функции getData
 function getData(key) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -49,8 +50,8 @@ async function displayKeys(offset, limit) {
   keyList.innerHTML = '<div class="text-center">Загрузка...</div>';
 
   try {
-    const keys = await getKeys(offset, limit); // Используем вашу функцию getKeys
-    keyList.innerHTML = ""; // Очищаем список перед добавлением новых ключей
+    const keys = await getKeys(offset, limit);
+    keyList.innerHTML = "";
 
     if (keys.length === 0) {
       keyList.innerHTML = '<div class="text-center">Ключи не найдены.</div>';
@@ -64,7 +65,6 @@ async function displayKeys(offset, limit) {
       });
     }
 
-    // Управляем состоянием кнопок
     prevBtn.disabled = offset === 0; // Кнопка "Назад" disabled, если offset = 0
     nextBtn.disabled = keys.length < limit; // Кнопка "Вперёд" disabled, если ключей меньше limit
   } catch (error) {
@@ -74,13 +74,12 @@ async function displayKeys(offset, limit) {
   }
 }
 
-// Обработчик клика по ключу
 async function handleKeyClick(key) {
   const responseArea = document.getElementById("response-area");
   responseArea.innerHTML = '<div class="text-center">Загрузка...</div>';
 
   try {
-    const data = await getData(key); // Используем вашу функцию getData
+    const data = await getData(key);
     responseArea.innerHTML = `
             <h5>Ответ для ключа "${key}":</h5>
             <p>${data}</p>
@@ -110,5 +109,4 @@ async function init() {
   });
 }
 
-// Запуск приложения
 init();
