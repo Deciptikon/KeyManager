@@ -12,6 +12,7 @@ const toast = new bootstrap.Toast(toastEl, {
 });
 
 function showToast(message) {
+  console.log(`showToast(message)`);
   document.getElementById("toast-message").textContent = message;
   toast.show();
 }
@@ -35,7 +36,6 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
       })
       .then((data) => {
         if (data.result) {
-          // Значение переменной задано
           showToast("Новый ключ сохранён.");
           displayKeys(currentOffset, limit);
         }
@@ -54,7 +54,7 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
     // Очищаем форму
     document.getElementById("add-key-form").reset();
   } else {
-    showToast('Заполниете поле "Key"');
+    showToast('Поле "Key" не заполнено.');
   }
 });
 
@@ -152,6 +152,7 @@ async function handleKeyClick(key) {
     // Обработчик для кнопки "Сохранить"
     document.getElementById("save-key-btn").addEventListener("click", () => {
       const newValue = document.getElementById("key-value-edit").value;
+
       // Отправляем изменения на сервер
       bridge
         .send("VKWebAppStorageSet", {
@@ -159,8 +160,6 @@ async function handleKeyClick(key) {
           value: newValue,
         })
         .then((response) => {
-          console.log("Значение ключа успешно обновлено:", response);
-
           if (newValue === "") {
             showToast("Ключ успешно удалён.");
             displayKeys(currentOffset, limit);
