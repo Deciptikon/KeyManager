@@ -37,10 +37,30 @@ function getKeys(offset, limit) {
 }
 
 function getData(key) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(`Данные для ключа ${key}: Lorem ipsum dolor sit amet.`); // Пример данных
-    }, 1000);
+  console.log(`getData(key)`);
+  return new Promise((resolve, reject) => {
+    bridge
+      .send("VKWebAppStorageGet", {
+        keys: [key], // Передаём массив с одним ключом
+      })
+      .then((response) => {
+        console.log(response);
+        if (
+          response.detail &&
+          response.detail.data &&
+          response.detail.data.keys
+        ) {
+          // Извлекаем значение по ключу
+          const value = response.detail.data.keys[0].value;
+          resolve(value); // Возвращаем значение
+        } else {
+          resolve("Данные не найдены"); // Если данные отсутствуют
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при получении данных:", error);
+        reject(error); // Пробрасываем ошибку
+      });
   });
 }
 
