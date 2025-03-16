@@ -105,7 +105,7 @@ async function handleKeyClick(key) {
   try {
     const data = await getData(key);
     responseArea.innerHTML = `
-            <h5>Ответ для ключа "${key}":</h5>
+            <h5>Значение по ключу "${key}":</h5>
             <p>${data}</p>
         `;
   } catch (error) {
@@ -121,7 +121,7 @@ function handleAddKey() {
     console.log("Добавляем новый ключ:", newKey);
     bridge
       .send("VKWebAppStorageSet", {
-        key: "example",
+        key: newKey,
         value: "example_value",
       })
       .then((data) => {
