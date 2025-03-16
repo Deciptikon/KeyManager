@@ -1,3 +1,11 @@
+function getKeys() {
+  //
+}
+
+function getData(key) {
+  //
+}
+
 // Функция для отображения списка ключей
 function displayKeys(keys) {
   const keyList = document.getElementById("key-list");

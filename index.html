@@ -32,6 +32,17 @@
       <div id="key-list" class="list-group mb-4"></div>
       <div id="response-area" class="response-area"></div>
     </div>
+    <!-- Инициализация VK -->
+    <script>
+      function initBridge() {
+        vkBridge.send("VKWebAppInit");
+        console.log(`initBridge()`);
+      }
+    </script>
+    <script
+      src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"
+      onload="initBridge()"
+    ></script>
 
     <!-- Bootstrap JS и зависимости -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
