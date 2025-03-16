@@ -19,18 +19,10 @@ function getKeys(offset, limit) {
       .then((response) => {
         console.log(`response = ${response}`);
         console.log(response);
-        console.log(`response.detail = ${response.detail}`);
-        console.log(`response.detail.data = ${response.detail.data}`);
-        console.log(`response.detail.data.keys = ${response.detail.data.keys}`);
-        if (
-          response.detail &&
-          response.detail.data &&
-          response.detail.data.keys
-        ) {
-          console.log(
-            `response.detail.data.keys = ${response.detail.data.keys}`
-          );
-          resolve(response.detail.data.keys); // Возвращаем массив ключей
+        console.log(`response.keys = ${response.keys}`);
+        if (response.keys.length > 0) {
+          console.log(`response.keys = ${response.keys}`);
+          resolve(response.keys); // Возвращаем массив ключей
         } else {
           resolve([]); // Если ключей нет, возвращаем пустой массив
         }
