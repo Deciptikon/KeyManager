@@ -2,6 +2,7 @@ console.log(`start app.js`);
 
 bridge = window.vkBridge;
 const pageNumberInput = document.getElementById("page-number-input");
+const responseArea = document.getElementById("response-area");
 
 const limitKeys = 5; // Количество ключей на странице
 let pageNumber = parseInt(pageNumberInput.value, 10); // текущий номер страницы
@@ -22,6 +23,7 @@ function showToast(message) {
 // Обработчик для формы добавления ключа
 document.getElementById("add-key-form").addEventListener("submit", (event) => {
   event.preventDefault(); // Предотвращаем отправку формы
+  responseArea.innerHTML = "";
 
   // Получаем данные из формы
   const keyName = document.getElementById("key-name").value;
@@ -57,18 +59,6 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
     document.getElementById("add-key-form").reset();
   } else {
     showToast('Поле "Key" не заполнено.');
-  }
-});
-
-document.getElementById("go-to-btn").addEventListener("click", () => {
-  const newPageNumber = parseInt(pageNumberInput.value, 10);
-
-  if (!isNaN(newPageNumber) && newPageNumber >= 0) {
-    pageNumber = newPageNumber;
-    currentOffset = pageNumber * limitKeys;
-    displayKeys(currentOffset, limitKeys);
-  } else {
-    showToast("Не корректный номер страницы.");
   }
 });
 
@@ -121,6 +111,7 @@ async function displayKeys(offset, limit) {
   const keyList = document.getElementById("key-list");
   const prevBtn = document.getElementById("prev-btn");
   const nextBtn = document.getElementById("next-btn");
+  responseArea.innerHTML = "";
 
   // Показываем загрузку
   keyList.innerHTML = '<div class="text-center">Загрузка...</div>';
@@ -152,7 +143,6 @@ async function displayKeys(offset, limit) {
 }
 
 async function handleKeyClick(key) {
-  const responseArea = document.getElementById("response-area");
   responseArea.innerHTML = '<div class="text-center">Загрузка...</div>';
 
   try {
@@ -217,6 +207,19 @@ async function init() {
       currentOffset = pageNumber * limitKeys;
 
       await displayKeys(currentOffset, limitKeys);
+    }
+  });
+
+  document.getElementById("go-to-btn").addEventListener("click", async () => {
+    const newPageNumber = parseInt(pageNumberInput.value, 10);
+
+    if (!isNaN(newPageNumber) && newPageNumber >= 0) {
+      pageNumber = newPageNumber;
+      currentOffset = pageNumber * limitKeys;
+
+      await displayKeys(currentOffset, limitKeys);
+    } else {
+      showToast("Не корректный номер страницы.");
     }
   });
 
