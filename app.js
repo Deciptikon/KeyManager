@@ -46,9 +46,8 @@ function getData(key) {
         console.log(response);
         console.log(response.keys[0]);
         if (response.keys.length > 0) {
-          // Извлекаем значение по ключу
-          const value = response.keys[0][key].value;
-          resolve(value); // Возвращаем значение
+          const data = response.keys[0]; // нулевой элемент
+          if (data.key === key) resolve(data.value); // Возвращаем значение
         } else {
           resolve("Данные не найдены"); // Если данные отсутствуют
         }
