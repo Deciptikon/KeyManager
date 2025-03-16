@@ -1,4 +1,9 @@
 bridge = window.vkBridge;
+
+document.getElementById("add-key-btn").addEventListener("click", () => {
+  handleAddKey();
+});
+
 let currentOffset = 0; // Текущее смещение
 const limit = 5; // Количество ключей на странице
 
@@ -75,11 +80,13 @@ async function displayKeys(offset, limit) {
 
   try {
     const keys = await getKeys(offset, limit);
-    keyList.innerHTML = "";
+    keyList.innerHTML = ""; // Очищаем список перед добавлением новых ключей
 
     if (keys.length === 0) {
+      addKeyItem.addEventListener("click", () => handleAddKey()); // Обработчик клика
       keyList.innerHTML = '<div class="text-center">Ключи не найдены.</div>';
     } else {
+      // Отображаем ключи
       keys.forEach((key) => {
         const keyItem = document.createElement("button");
         keyItem.className = "list-group-item list-group-item-action key-item";
@@ -89,6 +96,9 @@ async function displayKeys(offset, limit) {
       });
     }
 
+    // Добавляем элемент "Добавить ключ" (вне зависимости от наличия ключей)
+
+    // Управляем состоянием кнопок
     prevBtn.disabled = offset === 0; // Кнопка "Назад" disabled, если offset = 0
     nextBtn.disabled = keys.length < limit; // Кнопка "Вперёд" disabled, если ключей меньше limit
   } catch (error) {
@@ -112,6 +122,28 @@ async function handleKeyClick(key) {
     console.error("Ошибка при загрузке данных:", error);
     responseArea.innerHTML =
       '<div class="text-danger">Ошибка при загрузке данных.</div>';
+  }
+}
+
+function handleAddKey() {
+  const newKey = prompt("Введите новый ключ:"); // Простой способ ввода
+  if (newKey) {
+    console.log("Добавляем новый ключ:", newKey);
+    bridge
+      .send("VKWebAppStorageSet", {
+        key: "example",
+        value: "example_value",
+      })
+      .then((data) => {
+        if (data.result) {
+          // Значение переменной задано
+          displayKeys(currentOffset, limit);
+        }
+      })
+      .catch((error) => {
+        // Ошибка
+        console.log(error);
+      });
   }
 }
 
