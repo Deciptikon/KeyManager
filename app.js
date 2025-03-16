@@ -1,9 +1,11 @@
 console.log(`start app.js`);
 
 bridge = window.vkBridge;
+const pageNumberInput = document.getElementById("page-number-input");
 
-let currentOffset = 0; // Текущее смещение
-const limit = 5; // Количество ключей на странице
+const limitKeys = 5; // Количество ключей на странице
+let pageNumber = parseInt(pageNumberInput.value, 10); // текущий номер страницы
+let currentOffset = pageNumber * limitKeys; // Текущее смещение
 
 const toastEl = document.getElementById("toast");
 const toast = new bootstrap.Toast(toastEl, {
@@ -37,7 +39,7 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
       .then((data) => {
         if (data.result) {
           showToast("Новый ключ сохранён.");
-          displayKeys(currentOffset, limit);
+          displayKeys(currentOffset, limitKeys);
         }
       })
       .catch((error) => {
@@ -55,6 +57,18 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
     document.getElementById("add-key-form").reset();
   } else {
     showToast('Поле "Key" не заполнено.');
+  }
+});
+
+document.getElementById("go-to-btn").addEventListener("click", () => {
+  const newPageNumber = parseInt(pageNumberInput.value, 10);
+
+  if (!isNaN(newPageNumber) && newPageNumber >= 0) {
+    pageNumber = newPageNumber;
+    currentOffset = pageNumber * limitKeys;
+    displayKeys(currentOffset, limitKeys);
+  } else {
+    showToast("Не корректный номер страницы.");
   }
 });
 
@@ -162,7 +176,7 @@ async function handleKeyClick(key) {
         .then((response) => {
           if (newValue === "") {
             showToast("Ключ успешно удалён.");
-            displayKeys(currentOffset, limit);
+            displayKeys(currentOffset, limitKeys);
           } else {
             showToast("Изменения успешно сохранены.");
           }
@@ -192,19 +206,24 @@ async function init() {
       console.error(error);
     });
 
-  await displayKeys(currentOffset, limit);
+  await displayKeys(currentOffset, limitKeys);
 
   // Обработчики для кнопок пагинации
   document.getElementById("prev-btn").addEventListener("click", async () => {
-    if (currentOffset >= limit) {
-      currentOffset -= limit;
-      await displayKeys(currentOffset, limit);
+    pageNumber = parseInt(pageNumberInput.value, 10);
+    if (pageNumber > 0) {
+      pageNumber--;
+      currentOffset = pageNumber * limitKeys;
+
+      await displayKeys(currentOffset, limitKeys);
     }
   });
 
   document.getElementById("next-btn").addEventListener("click", async () => {
-    currentOffset += limit;
-    await displayKeys(currentOffset, limit);
+    pageNumber = parseInt(pageNumberInput.value, 10) + 1;
+    currentOffset = pageNumber * limitKeys;
+
+    await displayKeys(currentOffset, limitKeys);
   });
 }
 

@@ -27,6 +27,16 @@
       <div id="key-list" class="list-group mb-4"></div>
       <div class="pagination-controls">
         <button id="prev-btn" class="btn btn-primary" disabled>Назад</button>
+        <input
+          type="number"
+          id="offset-input"
+          class="form-control"
+          placeholder="Смещение"
+          min="0"
+          value="0"
+          style="width: 100px"
+        />
+        <button id="go-to-btn" class="btn btn-primary">-></button>
         <button id="next-btn" class="btn btn-primary">Вперёд</button>
       </div>
       <div id="response-area" class="response-area"></div>
@@ -121,6 +131,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <!-- Наш скрипт -->
-    <script src="app.js?v=0.0.15"></script>
+    <script src="app.js?v=0.0.16"></script>
   </body>
 </html>
