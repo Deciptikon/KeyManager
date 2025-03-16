@@ -1,23 +1,33 @@
+bridge = window.vkBridge;
+let currentOffset = 0; // Текущее смещение
+const limit = 5; // Количество ключей на странице
+
 // Пример функции getKeys
 function getKeys(offset, limit) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const allKeys = [
-        "key1",
-        "key2",
-        "key3",
-        "key4",
-        "key5",
-        "key6",
-        "key7",
-        "key8",
-        "key9",
-        "key10",
-      ];
-      const keys = allKeys.slice(offset, offset + limit); // Возвращаем ключи с учётом offset и limit
-      resolve(keys);
-    }, 1000);
-  });
+  function getKeys(offset, limit) {
+    return new Promise((resolve, reject) => {
+      bridge
+        .send("VKWebAppStorageGetKeys", {
+          count: limit,
+          offset: offset,
+        })
+        .then((response) => {
+          if (
+            response.detail &&
+            response.detail.data &&
+            response.detail.data.keys
+          ) {
+            resolve(response.detail.data.keys); // Возвращаем массив ключей
+          } else {
+            resolve([]); // Если ключей нет, возвращаем пустой массив
+          }
+        })
+        .catch((error) => {
+          console.error("Ошибка при получении ключей:", error);
+          reject(error); // Пробрасываем ошибку
+        });
+    });
+  }
 }
 
 // Пример функции getData
@@ -28,8 +38,6 @@ function getData(key) {
     }, 1000);
   });
 }
-let currentOffset = 0; // Текущее смещение
-const limit = 5; // Количество ключей на странице
 
 // Функция для отображения списка ключей
 async function displayKeys(offset, limit) {
