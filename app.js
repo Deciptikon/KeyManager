@@ -242,7 +242,9 @@ async function init() {
 
   // Обработчики для кнопок пагинации
   document.getElementById("prev-btn").addEventListener("click", async () => {
-    pageNumber = parseInt(pageNumberInput.value, 10);
+    let v = pageNumberInput.value;
+    if (v === "" || v === null) v = 0;
+    pageNumber = parseInt(v, 10);
     if (pageNumber > 0) {
       pageNumber--;
       currentOffset = pageNumber * limitKeys;
@@ -252,7 +254,9 @@ async function init() {
   });
 
   document.getElementById("go-to-btn").addEventListener("click", async () => {
-    const newPageNumber = parseInt(pageNumberInput.value, 10);
+    let v = pageNumberInput.value;
+    if (v === "" || v === null) v = 0;
+    const newPageNumber = parseInt(v, 10);
 
     if (!isNaN(newPageNumber) && newPageNumber >= 0) {
       pageNumber = newPageNumber;
@@ -265,7 +269,9 @@ async function init() {
   });
 
   document.getElementById("next-btn").addEventListener("click", async () => {
-    pageNumber = parseInt(pageNumberInput.value, 10) + 1;
+    let v = pageNumberInput.value;
+    if (v === "" || v === null) v = 0;
+    pageNumber = parseInt(v, 10) + 1;
     currentOffset = pageNumber * limitKeys;
 
     await displayKeys(currentOffset, limitKeys);
