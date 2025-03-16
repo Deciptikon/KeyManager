@@ -176,6 +176,7 @@ async function handleKeyClick(key) {
         .then((response) => {
           if (newValue === "") {
             showToast("Ключ успешно удалён.");
+            responseArea.innerHTML = "";
             displayKeys(currentOffset, limitKeys);
           } else {
             showToast("Изменения успешно сохранены.");
