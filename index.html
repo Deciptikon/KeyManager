@@ -40,7 +40,14 @@
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Список ключей</h1>
-        <button id="add-key-btn" class="btn btn-success">Добавить ключ</button>
+        <button
+          id="add-key-btn"
+          class="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#addKeyModal"
+        >
+          Добавить ключ
+        </button>
       </div>
       <div id="key-list" class="list-group mb-4"></div>
       <div class="pagination-controls">
@@ -49,6 +56,68 @@
       </div>
       <div id="response-area" class="response-area"></div>
     </div>
+
+    <!-- Модальное окно для добавления ключа -->
+    <div
+      class="modal fade"
+      id="addKeyModal"
+      tabindex="-1"
+      aria-labelledby="addKeyModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addKeyModalLabel">
+              Добавить новый ключ
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="add-key-form">
+              <div class="mb-3">
+                <label for="key-name" class="form-label">Имя ключа</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="key-name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="key-value" class="form-label"
+                  >Содержимое ключа</label
+                >
+                <textarea
+                  class="form-control"
+                  id="key-value"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Закрыть
+            </button>
+            <button type="submit" form="add-key-form" class="btn btn-primary">
+              Сохранить
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Инициализация VK -->
     <script>
       function initBridge() {

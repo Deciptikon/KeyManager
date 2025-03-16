@@ -1,8 +1,45 @@
 console.log(`start app.js`);
 bridge = window.vkBridge;
 
-document.getElementById("add-key-btn").addEventListener("click", () => {
-  handleAddKey();
+// Обработчик для формы добавления ключа
+document.getElementById("add-key-form").addEventListener("submit", (event) => {
+  event.preventDefault(); // Предотвращаем отправку формы
+
+  // Получаем данные из формы
+  const keyName = document.getElementById("key-name").value;
+  const keyValue = document.getElementById("key-value").value;
+
+  if (!keyValue) keyValue = "null";
+
+  if (keyName) {
+    console.log("Добавляем новый ключ:", keyName, "со значением:", keyValue);
+    bridge
+      .send("VKWebAppStorageSet", {
+        key: keyName,
+        value: keyValue,
+      })
+      .then((data) => {
+        if (data.result) {
+          // Значение переменной задано
+          displayKeys(currentOffset, limit);
+        }
+      })
+      .catch((error) => {
+        // Ошибка
+        console.log(error);
+      });
+
+    // Закрываем модальное окно
+    const modal = bootstrap.Modal.getInstance(
+      document.getElementById("addKeyModal")
+    );
+    modal.hide();
+
+    // Очищаем форму
+    document.getElementById("add-key-form").reset();
+  } else {
+    alert("Пожалуйста, заполните все поля.");
+  }
 });
 
 let currentOffset = 0; // Текущее смещение
