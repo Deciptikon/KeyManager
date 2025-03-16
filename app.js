@@ -112,6 +112,7 @@ async function displayKeys(offset, limit) {
   const prevBtn = document.getElementById("prev-btn");
   const nextBtn = document.getElementById("next-btn");
   responseArea.innerHTML = "";
+  pageNumberInput.value = pageNumber;
 
   // Показываем загрузку
   keyList.innerHTML = '<div class="text-center">Загрузка...</div>';
@@ -125,10 +126,30 @@ async function displayKeys(offset, limit) {
     } else {
       // Отображаем ключи
       keys.forEach((key) => {
-        const keyItem = document.createElement("button");
-        keyItem.className = "list-group-item list-group-item-action key-item";
-        keyItem.textContent = key;
-        keyItem.addEventListener("click", () => handleKeyClick(key));
+        const keyItem = document.createElement("div");
+        keyItem.className =
+          "list-group-item list-group-item-action key-item d-flex justify-content-between align-items-center";
+
+        // Текст ключа
+        const keyText = document.createElement("span");
+        keyText.textContent = key;
+        keyText.style.cursor = "pointer"; // Делаем текст кликабельным
+        keyText.addEventListener("click", () => handleKeyClick(key));
+
+        // Кнопка удаления
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "btn btn-danger btn-sm";
+        deleteButton.innerHTML = '<i class="bi bi-trash"></i>'; // Иконка мусорного ведра
+        deleteButton.addEventListener("click", (event) => {
+          event.stopPropagation(); // Предотвращаем всплытие события
+          handleDeleteKey(key); // Обработчик удаления ключа
+        });
+
+        // Добавляем текст и кнопку в элемент списка
+        keyItem.appendChild(keyText);
+        keyItem.appendChild(deleteButton);
+
+        // Добавляем элемент в список
         keyList.appendChild(keyItem);
       });
     }
@@ -181,6 +202,26 @@ async function handleKeyClick(key) {
     console.error("Ошибка при загрузке данных:", error);
     responseArea.innerHTML =
       '<div class="text-danger">Ошибка при загрузке данных.</div>';
+  }
+}
+
+function handleDeleteKey(key) {
+  if (confirm(`Вы уверены, что хотите удалить ключ "${key}"?`)) {
+    // Отправляем запрос на удаление ключа
+    bridge
+      .send("VKWebAppStorageSet", {
+        key: key,
+        value: "",
+      })
+      .then((response) => {
+        showToast("Ключ успешно удалён.");
+        responseArea.innerHTML = "";
+        displayKeys(currentOffset, limitKeys);
+      })
+      .catch((error) => {
+        showToast("Ошибка удаления ключа.");
+        console.error("Ошибка при сохранении изменений:", error);
+      });
   }
 }
 
