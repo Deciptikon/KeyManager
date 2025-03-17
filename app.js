@@ -173,12 +173,14 @@ async function displayKeys(offset, limit) {
         const keyItem = document.createElement("div");
         keyItem.className =
           "list-group-item list-group-item-action key-item d-flex justify-content-between align-items-center";
+        keyItem.style.cursor = "pointer";
+        keyItem.addEventListener("click", () => handleKeyClick(key));
 
         // Текст ключа
         const keyText = document.createElement("span");
         keyText.textContent = key;
-        keyText.style.cursor = "pointer"; // Делаем текст кликабельным
-        keyText.addEventListener("click", () => handleKeyClick(key));
+        //keyText.style.cursor = "pointer"; // Делаем текст кликабельным
+        //keyText.addEventListener("click", () => handleKeyClick(key));
 
         // Кнопка удаления
         const deleteButton = document.createElement("button");
