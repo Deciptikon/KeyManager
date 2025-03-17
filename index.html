@@ -172,6 +172,51 @@
       </div>
     </div>
 
+    <!-- Модальное окно для подтверждения удаления -->
+    <div
+      class="modal fade"
+      id="deleteConfirmModal"
+      tabindex="-1"
+      aria-labelledby="deleteConfirmModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteConfirmModalLabel">
+              Подтверждение удаления
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Закрыть"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Вы уверены, что хотите удалить этот ключ? Это действие будет не
+            возможно отменить!
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Отмена
+            </button>
+            <button
+              type="button"
+              id="confirm-delete-btn"
+              class="btn btn-danger"
+            >
+              Удалить
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Контейнер для тостов -->
     <div aria-live="polite" aria-atomic="true" class="position-relative">
       <!-- Сам тост -->

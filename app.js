@@ -7,6 +7,7 @@ const responseArea = document.getElementById("response-area");
 const limitKeys = 5; // Количество ключей на странице
 let pageNumber = parseInt(pageNumberInput.value, 10); // текущий номер страницы
 let currentOffset = pageNumber * limitKeys; // Текущее смещение
+let keyToDelete = null;
 
 const toastEl = document.getElementById("toast");
 const toast = new bootstrap.Toast(toastEl, {
@@ -127,6 +128,28 @@ function getData(key) {
   });
 }
 
+document.getElementById("confirm-delete-btn").addEventListener("click", () => {
+  if (keyToDelete) {
+    // Отправляем запрос на удаление ключа
+    handleDeleteKey(keyToDelete);
+
+    // Закрываем модальное окно
+    const modal = bootstrap.Modal.getInstance(
+      document.getElementById("deleteConfirmModal")
+    );
+    modal.hide();
+  }
+});
+
+// открытие модального окна подтверждения удаления
+function openDeleteModal(key) {
+  keyToDelete = key; // Сохраняем ключ для удаления
+  const modal = new bootstrap.Modal(
+    document.getElementById("deleteConfirmModal")
+  );
+  modal.show();
+}
+
 // Функция для отображения списка ключей
 async function displayKeys(offset, limit) {
   const keyList = document.getElementById("key-list");
@@ -163,7 +186,7 @@ async function displayKeys(offset, limit) {
         deleteButton.innerHTML = '<i class="bi bi-trash"></i>'; // Иконка мусорного ведра
         deleteButton.addEventListener("click", (event) => {
           event.stopPropagation(); // Предотвращаем всплытие события
-          handleDeleteKey(key); // Обработчик удаления ключа
+          openDeleteModal(key); // Обработчик удаления ключа
         });
 
         // Добавляем текст и кнопку в элемент списка
@@ -227,23 +250,22 @@ async function handleKeyClick(key) {
 }
 
 function handleDeleteKey(key) {
-  if (confirm(`Вы уверены, что хотите удалить ключ "${key}"?`)) {
-    // Отправляем запрос на удаление ключа
-    bridge
-      .send("VKWebAppStorageSet", {
-        key: key,
-        value: "",
-      })
-      .then((response) => {
-        showToast("Ключ успешно удалён.");
-        responseArea.innerHTML = "";
-        displayKeys(currentOffset, limitKeys);
-      })
-      .catch((error) => {
-        showToast("Ошибка удаления ключа.");
-        console.error("Ошибка при сохранении изменений:", error);
-      });
-  }
+  // Отправляем запрос на удаление ключа
+  bridge
+    .send("VKWebAppStorageSet", {
+      key: key,
+      value: "",
+    })
+    .then((response) => {
+      showToast("Ключ успешно удалён.");
+      responseArea.innerHTML = "";
+      keyToDelete = null;
+      displayKeys(currentOffset, limitKeys);
+    })
+    .catch((error) => {
+      showToast("Ошибка удаления ключа.");
+      console.error("Ошибка при сохранении изменений:", error);
+    });
 }
 
 // Инициализация приложения
@@ -259,6 +281,7 @@ async function init() {
       console.error(error);
     });
 
+  responseArea.innerHTML = "";
   await displayKeys(currentOffset, limitKeys);
 
   // Обработчики для кнопок пагинации
