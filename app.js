@@ -1,6 +1,5 @@
-console.log(`start app.js`);
-
 bridge = window.vkBridge;
+
 const pageNumberInput = document.getElementById("page-number-input");
 const responseArea = document.getElementById("response-area");
 
@@ -16,7 +15,7 @@ const toast = new bootstrap.Toast(toastEl, {
 });
 
 function showToast(message) {
-  console.log(`showToast(message)`);
+  //console.log(`showToast(message)`);
   document.getElementById("toast-message").textContent = message;
   toast.show();
 }
@@ -33,7 +32,7 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
   if (!keyValue) keyValue = "null";
 
   if (keyName) {
-    console.log("Добавляем новый ключ:", keyName, "со значением:", keyValue);
+    //console.log("Добавляем новый ключ:", keyName, "со значением:", keyValue);
     bridge
       .send("VKWebAppStorageSet", {
         key: keyName,
@@ -47,7 +46,7 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
       })
       .catch((error) => {
         showToast("Ошибка добавления ключа.");
-        console.log(error);
+        console.error("Ошибка добавления ключа:", error);
       });
 
     // Закрываем модальное окно
@@ -85,7 +84,7 @@ document.getElementById("srch-key-form").addEventListener("submit", (event) => {
 });
 
 function getKeys(offset, limit) {
-  console.log(`getKeys()`);
+  //console.log(`getKeys()`);
   return new Promise((resolve, reject) => {
     bridge
       .send("VKWebAppStorageGetKeys", {
@@ -107,7 +106,7 @@ function getKeys(offset, limit) {
 }
 
 function getData(key) {
-  console.log(`getData(key)`);
+  //console.log(`getData(key)`);
   return new Promise((resolve, reject) => {
     bridge
       .send("VKWebAppStorageGet", {
@@ -115,7 +114,7 @@ function getData(key) {
       })
       .then((response) => {
         if (response.keys.length > 0) {
-          const data = response.keys[0]; // нулевой элемент
+          const data = response.keys[0]; // нулевой элемент (потому что ключ всего один)
           if (data.key === key) resolve(data.value); // Возвращаем значение
         } else {
           resolve("Данные не найдены"); // Если данные отсутствуют
@@ -179,8 +178,6 @@ async function displayKeys(offset, limit) {
         // Текст ключа
         const keyText = document.createElement("span");
         keyText.textContent = key;
-        //keyText.style.cursor = "pointer"; // Делаем текст кликабельным
-        //keyText.addEventListener("click", () => handleKeyClick(key));
 
         // Кнопка удаления
         const deleteButton = document.createElement("button");
@@ -272,7 +269,7 @@ function handleDeleteKey(key) {
 
 // Инициализация приложения
 async function init() {
-  console.log(`function init()`);
+  //console.log(`function init()`);
   bridge
     .send("VKWebAppGetConfig")
     .then((data) => {
