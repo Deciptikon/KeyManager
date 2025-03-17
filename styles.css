@@ -7,6 +7,11 @@
   background-color: #f8f9fa;
 }
 
+#srch-key-btn {
+  font-weight: bold; /* Жирный текст */
+  padding: 10px 15px; /* Отступы */
+}
+
 #add-key-btn {
   font-weight: bold; /* Жирный текст */
   padding: 10px 15px; /* Отступы */

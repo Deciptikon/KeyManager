@@ -62,6 +62,27 @@ document.getElementById("add-key-form").addEventListener("submit", (event) => {
   }
 });
 
+document.getElementById("srch-key-form").addEventListener("submit", (event) => {
+  event.preventDefault(); // Предотвращаем отправку формы
+
+  const keyName = document.getElementById("srch-key-name").value; // Получаем значение из поля ввода
+
+  if (keyName) {
+    responseArea.innerHTML = "";
+
+    // Выполняем поиск ключа
+    handleKeyClick(keyName);
+
+    // Закрываем модальное окно
+    const modal = bootstrap.Modal.getInstance(
+      document.getElementById("srchKeyModal")
+    );
+    modal.hide();
+  } else {
+    showToast('Поле "Key" не заполнено.');
+  }
+});
+
 function getKeys(offset, limit) {
   console.log(`getKeys()`);
   return new Promise((resolve, reject) => {
