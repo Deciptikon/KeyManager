@@ -4,7 +4,15 @@
 }
 
 .key-item:hover {
-  background-color: #f8f9fa;
+  background-color: #d5d5d5;
+}
+
+.key-item span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
 #srch-key-btn {
