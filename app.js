@@ -231,11 +231,11 @@ async function handleKeyClick(key) {
         .then((response) => {
           if (newValue === "") {
             showToast("Ключ успешно удалён.");
-            responseArea.innerHTML = "";
-            displayKeys(currentOffset, limitKeys);
           } else {
             showToast("Изменения успешно сохранены.");
           }
+          responseArea.innerHTML = "";
+          displayKeys(currentOffset, limitKeys);
         })
         .catch((error) => {
           console.error("Ошибка при сохранении изменений:", error);
