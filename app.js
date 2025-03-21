@@ -15,10 +15,25 @@ const toast = new bootstrap.Toast(toastEl, {
 });
 
 function showToast(message) {
-  //console.log(`showToast(message)`);
   document.getElementById("toast-message").textContent = message;
   toast.show();
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  let modalElement = document.getElementById("infoKeyModal");
+
+  let infoModal = new bootstrap.Modal(modalElement, {
+    keyboard: false,
+  });
+  infoModal.show();
+
+  modalElement.addEventListener("hidden.bs.modal", function () {
+    let nbtt = document.getElementById("next-btn");
+    if (nbtt) {
+      nbtt.focus();
+    }
+  });
+});
 
 // Обработчик для формы добавления ключа
 document.getElementById("add-key-form").addEventListener("submit", (event) => {

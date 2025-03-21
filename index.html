@@ -62,6 +62,62 @@
       <div id="response-area" class="response-area"></div>
     </div>
 
+    <!-- Модальное окно с предупреждением -->
+    <div
+      class="modal fade"
+      id="infoKeyModal"
+      tabindex="-1"
+      aria-labelledby="infoKeyModalLabel"
+      aria-hidden="true"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoKeyModalLabel">ВНИМАНИЕ!</h5>
+          </div>
+          <div class="modal-body">
+            Это приложение создано исключительно для взаимодействия с хранилищем
+            VK.Storage, оно НЕ ПРЕДНАЗНАЧЕНО для хранения ценной информации или
+            конфеденциальных данных.<br />
+            Вы можете пользоваться им для анализа и мониторинга хранимых в
+            VK.Storage данных в виде пар "key: value".<br />
+            <br />
+            Кроме редактирования любого ключа в приложении вам доступны:<br />
+            <button class="btn btn-success mb-1">
+              <i class="bi bi-search"></i></i>
+            </button></i> Поиск конкретного ключа "key".<br />
+            <button class="btn btn-success mb-1">
+              <i class="bi bi-plus-circle"></i>
+            </button></i> Создание новой пары "key: value".<br />
+            <button class="btn btn-danger mb-1">
+              <i class="bi bi-trash"></i>
+            </button></i> Удаление любой пары "key: value".<br />
+            А так же.<br />
+            <button class="btn btn-primary mb-1">
+              <i class="bi bi-arrow-left"></i>
+            </button></i>
+            <button class="btn btn-primary mb-1">
+              <i class="bi bi-arrow-right"></i>
+            </button></i> Постраничная навигация.<br />
+            <button class="btn btn-primary mb-1">
+              <i class="bi bi-three-dots"></i>
+            </button></i> Выбор нужной страницы<br />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Согласиться и продолжить.
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Модальное окно для добавления ключа -->
     <div
       class="modal fade"
@@ -247,6 +303,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <!-- Наш скрипт -->
-    <script src="app.js?v=0.0.23"></script>
+    <script src="app.js?v=0.0.24"></script>
   </body>
 </html>
