@@ -22,6 +22,10 @@ function showToast(message) {
   toast.show();
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+  init();
+});
+
 // Обработчик для формы добавления ключа
 document.getElementById("add-key-form").addEventListener("submit", (event) => {
   event.preventDefault(); // Предотвращаем отправку формы
@@ -365,5 +369,3 @@ async function init() {
     await displayKeys(currentOffset, limitKeys);
   });
 }
-
-init();
