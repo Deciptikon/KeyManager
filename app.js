@@ -8,6 +8,9 @@ let pageNumber = parseInt(pageNumberInput.value, 10); // текущий номе
 let currentOffset = pageNumber * limitKeys; // Текущее смещение
 let keyToDelete = null;
 
+const KEY_SAVE_AGREE = "KeyManagerIAgree";
+let iAgree = false;
+
 const toastEl = document.getElementById("toast");
 const toast = new bootstrap.Toast(toastEl, {
   autohide: true,
@@ -18,22 +21,6 @@ function showToast(message) {
   document.getElementById("toast-message").textContent = message;
   toast.show();
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-  let modalElement = document.getElementById("infoKeyModal");
-
-  let infoModal = new bootstrap.Modal(modalElement, {
-    keyboard: false,
-  });
-  infoModal.show();
-
-  modalElement.addEventListener("hidden.bs.modal", function () {
-    let nbtt = document.getElementById("next-btn");
-    if (nbtt) {
-      nbtt.focus();
-    }
-  });
-});
 
 // Обработчик для формы добавления ключа
 document.getElementById("add-key-form").addEventListener("submit", (event) => {
@@ -284,7 +271,50 @@ function handleDeleteKey(key) {
 
 // Инициализация приложения
 async function init() {
-  //console.log(`function init()`);
+  bridge
+    .send("VKWebAppStorageGet", {
+      keys: [KEY_SAVE_AGREE], // Передаём массив с одним ключом
+    })
+    .then((response) => {
+      if (response.keys.length > 0) {
+        const data = response.keys[0]; // нулевой элемент (потому что ключ всего один)
+        if (data.key === key && data.value === "true") {
+          iAgree = true;
+        }
+      }
+
+      if (!iAgree) {
+        let modalElement = document.getElementById("infoKeyModal");
+
+        let infoModal = new bootstrap.Modal(modalElement, {
+          keyboard: false,
+        });
+        infoModal.show();
+
+        modalElement.addEventListener("hidden.bs.modal", function () {
+          let nbtt = document.getElementById("next-btn");
+          if (nbtt) {
+            nbtt.focus();
+          }
+
+          bridge
+            .send("VKWebAppStorageSet", {
+              key: KEY_SAVE_AGREE,
+              value: "true",
+            })
+            .then((response) => {
+              displayKeys(currentOffset, limitKeys);
+            })
+            .catch((error) => {
+              console.error("Ошибка при сохранении изменений:", error);
+            });
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Ошибка при получении данных:", error);
+    });
+
   bridge
     .send("VKWebAppGetConfig")
     .then((data) => {
