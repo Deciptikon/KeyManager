@@ -278,7 +278,7 @@ async function init() {
     .then((response) => {
       if (response.keys.length > 0) {
         const data = response.keys[0]; // нулевой элемент (потому что ключ всего один)
-        if (data.key === key && data.value === "true") {
+        if (data.key === KEY_SAVE_AGREE && data.value === "true") {
           iAgree = true;
         }
       }
