@@ -228,7 +228,7 @@ async function handleKeyClick(key) {
     const data = await getData(key);
     responseArea.innerHTML = `
       <h5>Значение по ключу "${key}":</h5>
-      <textarea id="key-value-edit" class="form-control mb-2" rows="5">${data}</textarea>
+      <textarea id="key-value-edit" class="form-control mb-2" rows="3">${data}</textarea>
       <button id="save-key-btn" class="btn btn-primary">Сохранить</button>
     `;
 
