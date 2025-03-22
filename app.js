@@ -275,6 +275,23 @@ function handleDeleteKey(key) {
 
 // Инициализация приложения
 async function init() {
+  // реклама
+  bridge
+    .send("VKWebAppShowBannerAd", {
+      banner_location: "bottom",
+    })
+    .then((data) => {
+      if (data.result) {
+        // Баннерная реклама отобразилась
+        console.log("Баннерная реклама отобразилась");
+      }
+    })
+    .catch((error) => {
+      // Ошибка
+      console.log(error);
+    });
+
+  // Предупреждение
   bridge
     .send("VKWebAppStorageGet", {
       keys: [KEY_SAVE_AGREE], // Передаём массив с одним ключом
